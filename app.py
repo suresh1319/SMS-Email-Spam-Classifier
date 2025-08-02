@@ -1,20 +1,14 @@
 import pickle
 import streamlit as st
 import nltk
-from nltk import PorterStemmer
+import os
+from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
-
-import nltk
-nltk.download('punkt')
-nltk.download('stopwords')
+from nltk.stem.porter import PorterStemmer
 
 # Download necessary NLTK data
 @st.cache_resource
-@st.cache_resource
 def download_nltk_data():
-    import nltk
-    import os
-
     nltk_data_path = os.path.join(os.getcwd(), "nltk_data")
     os.makedirs(nltk_data_path, exist_ok=True)
     nltk.data.path.append(nltk_data_path)
@@ -23,7 +17,6 @@ def download_nltk_data():
     nltk.download("stopwords", download_dir=nltk_data_path)
 
 download_nltk_data()
-
 
 # Initialize stemmer and stopwords
 ps = PorterStemmer()
@@ -45,9 +38,10 @@ input_sms = st.text_area("Enter the message you want to check")
 # Text preprocessing function
 def transform_text(text):
     text = text.lower()
-    tokens = nltk.word_tokenize(text)
+    tokens = word_tokenize(text)  # FIX: use correct tokenizer
     processed_tokens = [ps.stem(token) for token in tokens if token.isalnum() and token not in stop_words]
     return " ".join(processed_tokens)
+
 if st.button('Predict'):
     if not input_sms.strip():
         st.warning("Please enter a message to classify.")
