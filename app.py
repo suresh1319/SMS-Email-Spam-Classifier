@@ -10,11 +10,20 @@ nltk.download('stopwords')
 
 # Download necessary NLTK data
 @st.cache_resource
+@st.cache_resource
 def download_nltk_data():
-    nltk.download('stopwords')
-    nltk.download('punkt')
+    import nltk
+    import os
+
+    nltk_data_path = os.path.join(os.getcwd(), "nltk_data")
+    os.makedirs(nltk_data_path, exist_ok=True)
+    nltk.data.path.append(nltk_data_path)
+
+    nltk.download("punkt", download_dir=nltk_data_path)
+    nltk.download("stopwords", download_dir=nltk_data_path)
 
 download_nltk_data()
+
 
 # Initialize stemmer and stopwords
 ps = PorterStemmer()
