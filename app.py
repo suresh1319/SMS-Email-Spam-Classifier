@@ -4,6 +4,10 @@ import nltk
 from nltk import PorterStemmer
 from nltk.corpus import stopwords
 
+import nltk
+nltk.download('punkt')
+nltk.download('stopwords')
+
 # Download necessary NLTK data
 @st.cache_resource
 def download_nltk_data():
