@@ -35,30 +35,14 @@ def transform_text(text):
     tokens = nltk.word_tokenize(text)
     processed_tokens = [ps.stem(token) for token in tokens if token.isalnum() and token not in stop_words]
     return " ".join(processed_tokens)
-
-# Prediction logic
 if st.button('Predict'):
     if not input_sms.strip():
         st.warning("Please enter a message to classify.")
     else:
-        # Preprocess input
         transformed_sms = transform_text(input_sms)
-
-        # Vectorize input
         vector_input = tfidf.transform([transformed_sms])
-
-        # Make prediction
         result = model.predict(vector_input)[0]
-
-        # Display result
         if result == 1:
             st.header("🚫 Spam")
         else:
             st.header("✅ Not Spam")
-
-        # Show prediction confidence if model supports it
-        try:
-            confidence = model.predict_proba(vector_input)[0][1 if result == 1 else 0]
-            st.subheader(f"Prediction Confidence: {confidence:.2%}")
-        except AttributeError:
-            st.info("Confidence score not available for this model.")
